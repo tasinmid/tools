@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tools Directory 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface-hover: #1a1a1a;
+    --border: #242424;
+    --text: #f0f0f0;
+    --text-muted: #6b6b6b;
+    --accent: #e85d04;
+    --accent-dim: rgba(232, 93, 4, 0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.65;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 20% -10%, rgba(232, 93, 4, 0.06), transparent),
+      radial-gradient(ellipse 50% 60% at 90% 110%, rgba(232, 93, 4, 0.03), transparent);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 100px 48px 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .header-meta {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(42px, 7vw, 78px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .header-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: 460px;
+    font-weight: 300;
+  }
+
+  /* ── NAV PILLS ── */
+  .nav-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 48px 36px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    animation: fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .nav-pill {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 7px 18px;
+    font-family: 'Sora', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .nav-pill:hover, .nav-pill.active {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 48px 100px;
+  }
+
+  /* ── CATEGORY ── */
+  .category {
+    padding-top: 80px;
+    animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .category-num {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .category-title {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .category-count {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── TOOL GRID ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  /* ── TOOL CARD ── */
+  .tool-card {
+    background: var(--surface);
+    padding: 32px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: bottom;
+  }
+
+  .tool-card:hover {
+    background: var(--surface-hover);
+  }
+
+  .tool-card:hover::before {
+    transform: scaleY(1);
+  }
+
+  .tool-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tool-index {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .tool-name {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    flex: 1;
+  }
+
+  .tool-link {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    white-space: nowrap;
+    transition: all 0.18s ease;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  .tool-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .tool-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 48px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer span { text-transform: uppercase; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .category:nth-child(1) { animation-delay: 0.15s; }
+  .category:nth-child(2) { animation-delay: 0.22s; }
+  .category:nth-child(3) { animation-delay: 0.29s; }
+  .category:nth-child(4) { animation-delay: 0.36s; }
+  .category:nth-child(5) { animation-delay: 0.43s; }
+  .category:nth-child(6) { animation-delay: 0.50s; }
+  .category:nth-child(7) { animation-delay: 0.57s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    header, .nav-wrap, main, footer { padding-left: 24px; padding-right: 24px; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .category-count { display: none; }
+    h1 { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="header-meta">Curated April 2026 · 35 Tools · 7 Categories</p>
+  <h1>Welcome to AI Tools<br>Directory<span id="dir-comma" style="color: inherit; display: none;">, </span><em id="dir-name"></em></h1>
+  <p class="header-sub">Your toolkit for the future of work.</p>
+</header>
+
+<nav class="nav-wrap">
+  <a class="nav-pill" href="#copywriting">Copywriting</a>
+  <a class="nav-pill" href="#automation">Automation</a>
+  <a class="nav-pill" href="#coding">Coding</a>
+  <a class="nav-pill" href="#marketing">Marketing</a>
+  <a class="nav-pill" href="#video-image">Video & Image</a>
+  <a class="nav-pill" href="#research">Research</a>
+  <a class="nav-pill" href="#assistants">Assistants</a>
+</nav>
+
+<main>
+
+  <!-- 1. Copywriting -->
+  <section class="category" id="copywriting">
+    <div class="category-header">
+      <span class="category-num">01</span>
+      <h2 class="category-title">Copywriting</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">Jasper</span>
+          <a class="tool-link" href="https://jasper.ai" target="_blank">jasper.ai ↗</a>
+        </div>
+        <p class="tool-desc">Industry-leading AI writer with 70+ templates for blogs, ads, and social media content.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">Copy.ai</span>
+          <a class="tool-link" href="https://copy.ai" target="_blank">copy.ai ↗</a>
+        </div>
+        <p class="tool-desc">Versatile AI copywriting tool with 90+ templates for various content types.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">Writesonic</span>
+          <a class="tool-link" href="https://writesonic.com" target="_blank">writesonic.com ↗</a>
+        </div>
+        <p class="tool-desc">Affordable AI writer for blog posts, landing pages, and product descriptions.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">Rytr</span>
+          <a class="tool-link" href="https://rytr.me" target="_blank">rytr.me ↗</a>
+        </div>
+        <p class="tool-desc">Budget-friendly AI writing assistant with multiple tone options.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Anyword</span>
+          <a class="tool-link" href="https://anyword.com" target="_blank">anyword.com ↗</a>
+        </div>
+        <p class="tool-desc">Data-driven AI copywriting tool with predictive performance scoring.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Automation -->
+  <section class="category" id="automation">
+    <div class="category-header">
+      <span class="category-num">02</span>
+      <h2 class="category-title">Automation</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">Zapier</span>
+          <a class="tool-link" href="https://zapier.com" target="_blank">zapier.com ↗</a>
+        </div>
+        <p class="tool-desc">Leading no-code automation platform connecting 6,000+ apps.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">Make</span>
+          <a class="tool-link" href="https://make.com" target="_blank">make.com ↗</a>
+        </div>
+        <p class="tool-desc">Visual workflow automation with powerful integrations, formerly Integromat.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">n8n</span>
+          <a class="tool-link" href="https://n8n.io" target="_blank">n8n.io ↗</a>
+        </div>
+        <p class="tool-desc">Open-source workflow automation tool with AI agent capabilities.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">Pabbly</span>
+          <a class="tool-link" href="https://pabbly.com" target="_blank">pabbly.com ↗</a>
+        </div>
+        <p class="tool-desc">Affordable automation alternative with email marketing integrations.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Automate.io</span>
+          <a class="tool-link" href="https://automate.io" target="_blank">automate.io ↗</a>
+        </div>
+        <p class="tool-desc">Business process automation connecting 200+ SaaS applications.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Coding -->
+  <section class="category" id="coding">
+    <div class="category-header">
+      <span class="category-num">03</span>
+      <h2 class="category-title">Coding</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">GitHub Copilot</span>
+          <a class="tool-link" href="https://github.com/features/copilot" target="_blank">github.com ↗</a>
+        </div>
+        <p class="tool-desc">AI pair programmer by GitHub & OpenAI, integrated into major IDEs.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">Cursor</span>
+          <a class="tool-link" href="https://cursor.sh" target="_blank">cursor.sh ↗</a>
+        </div>
+        <p class="tool-desc">AI-first code editor for power users with complex project support.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">Tabnine</span>
+          <a class="tool-link" href="https://tabnine.com" target="_blank">tabnine.com ↗</a>
+        </div>
+        <p class="tool-desc">Privacy-focused AI code completion with local deployment options.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">CodeWhisperer</span>
+          <a class="tool-link" href="https://aws.amazon.com/codewhisperer" target="_blank">aws.amazon.com ↗</a>
+        </div>
+        <p class="tool-desc">Free AI coding companion trained on Amazon's codebase.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Replit AI</span>
+          <a class="tool-link" href="https://replit.com" target="_blank">replit.com ↗</a>
+        </div>
+        <p class="tool-desc">AI-powered browser-based IDE with instant deployment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Marketing -->
+  <section class="category" id="marketing">
+    <div class="category-header">
+      <span class="category-num">04</span>
+      <h2 class="category-title">Marketing Content</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">ChatGPT</span>
+          <a class="tool-link" href="https://chat.openai.com" target="_blank">openai.com ↗</a>
+        </div>
+        <p class="tool-desc">Versatile AI for content ideation, writing, and strategy.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">Jasper</span>
+          <a class="tool-link" href="https://jasper.ai" target="_blank">jasper.ai ↗</a>
+        </div>
+        <p class="tool-desc">End-to-end marketing co-pilot with SEO and brand voice features.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">Copy.ai</span>
+          <a class="tool-link" href="https://copy.ai" target="_blank">copy.ai ↗</a>
+        </div>
+        <p class="tool-desc">Quick-turnaround content for campaigns, social media, and email.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">Surfer SEO</span>
+          <a class="tool-link" href="https://semrush.com/surferseo" target="_blank">semrush.com ↗</a>
+        </div>
+        <p class="tool-desc">AI content optimization aligned with search rankings.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Notion AI</span>
+          <a class="tool-link" href="https://notion.so" target="_blank">notion.so ↗</a>
+        </div>
+        <p class="tool-desc">Integrated AI writing assistant within the productivity workspace.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Video & Image -->
+  <section class="category" id="video-image">
+    <div class="category-header">
+      <span class="category-num">05</span>
+      <h2 class="category-title">Video & Image</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">Freepik AI</span>
+          <a class="tool-link" href="https://freepik.com/ai/image-generator" target="_blank">freepik.com ↗</a>
+        </div>
+        <p class="tool-desc">All-in-one AI creative suite with image, art, and video generation.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">Adobe Firefly</span>
+          <a class="tool-link" href="https://firefly.adobe.com" target="_blank">adobe.com ↗</a>
+        </div>
+        <p class="tool-desc">Generative AI from Adobe for images, video, audio, and designs.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">Canva AI</span>
+          <a class="tool-link" href="https://canva.com/ai-image-generator" target="_blank">canva.com ↗</a>
+        </div>
+        <p class="tool-desc">Free text-to-image generator integrated into the Canva design platform.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">Ideogram</span>
+          <a class="tool-link" href="https://ideogram.ai" target="_blank">ideogram.ai ↗</a>
+        </div>
+        <p class="tool-desc">AI image generator specializing in accurate text rendering in images.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Shakker AI</span>
+          <a class="tool-link" href="https://shakker.ai" target="_blank">shakker.ai ↗</a>
+        </div>
+        <p class="tool-desc">Generative AI design tool with access to diverse image generation models.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Research -->
+  <section class="category" id="research">
+    <div class="category-header">
+      <span class="category-num">06</span>
+      <h2 class="category-title">Research Agents</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">Perplexity AI</span>
+          <a class="tool-link" href="https://perplexity.ai" target="_blank">perplexity.ai ↗</a>
+        </div>
+        <p class="tool-desc">AI answer engine with real-time web search and citations.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">You.com</span>
+          <a class="tool-link" href="https://you.com" target="_blank">you.com ↗</a>
+        </div>
+        <p class="tool-desc">AI search platform with web APIs for agents and LLMs.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">ChatGPT Deep Research</span>
+          <a class="tool-link" href="https://chat.openai.com" target="_blank">openai.com ��</a>
+        </div>
+        <p class="tool-desc">OpenAI's research mode for in-depth analysis tasks.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">Gemini Deep Research</span>
+          <a class="tool-link" href="https://gemini.google.com" target="_blank">gemini.google.com ↗</a>
+        </div>
+        <p class="tool-desc">Google's research agent for comprehensive topic exploration.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Consensus</span>
+          <a class="tool-link" href="https://consensus.app" target="_blank">consensus.app ↗</a>
+        </div>
+        <p class="tool-desc">AI-powered academic research search engine for scientific papers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Personal Assistants -->
+  <section class="category" id="assistants">
+    <div class="category-header">
+      <span class="category-num">07</span>
+      <h2 class="category-title">Personal Assistants</h2>
+      <span class="category-count">5 tools</span>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">01</span>
+          <span class="tool-name">OpenClaw</span>
+          <a class="tool-link" href="https://openclaw.ai" target="_blank">openclaw.ai ↗</a>
+        </div>
+        <p class="tool-desc">Open-source personal AI assistant with browser, automation, and tool plugins.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">02</span>
+          <span class="tool-name">MaxAI</span>
+          <a class="tool-link" href="https://maxai.co" target="_blank">maxai.co ↗</a>
+        </div>
+        <p class="tool-desc">All-in-one browser AI assistant for reading, writing, and searching.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">03</span>
+          <span class="tool-name">Manus</span>
+          <a class="tool-link" href="https://manus.im" target="_blank">manus.im ↗</a>
+        </div>
+        <p class="tool-desc">General AI agent that executes tasks and automates workflows beyond just answering.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">04</span>
+          <span class="tool-name">Claude Cowork</span>
+          <a class="tool-link" href="https://claude.ai" target="_blank">claude.ai ↗</a>
+        </div>
+        <p class="tool-desc">AI teammate by Anthropic for file management, app control, and workflows.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-top">
+          <span class="tool-index">05</span>
+          <span class="tool-name">Perplexity Computer</span>
+          <a class="tool-link" href="https://perplexity.ai/computer" target="_blank">perplexity.ai ↗</a>
+        </div>
+        <p class="tool-desc">Agentic AI that operates your computer to complete tasks like booking and forms.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>AI Tools Directory 2026</span>
+  <span>35 tools · 7 categories · April 2026</span>
+</footer>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
+
+  const supabase = createClient(
+    'https://tzntpxvzkrykfeflqkxv.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6bnRweHZ6a3J5a2ZlZmxxa3h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM0NDIsImV4cCI6MjA5MjAwOTQ0Mn0.KwM6yZF1pI3pNxjQaduG3kmKC7cSsUey8VVzoFwZXt8'
+  )
+
+  // Get ID from URL
+  const urlParams = new URLSearchParams(window.location.search)
+  const dirId = urlParams.get('id')
+
+  // Fetch name and update opened count
+  async function fetchDirName() {
+    try {
+      // First get the current row
+      const { data: currentData, error: fetchError } = await supabase
+        .from('ai_tool_directory_lm')
+        .select('name, opened')
+        .eq('id', dirId)
+        .single()
+
+      if (fetchError) {
+        console.log('Error: ' + fetchError.message)
+        return
+      }
+
+      if (currentData?.name) {
+        document.getElementById('dir-comma').style.display = 'inline'
+        document.getElementById('dir-name').textContent = currentData.name + '.'
+      }
+
+      // Calculate new opened value
+      const newOpened = (currentData?.opened || 0) + 1
+
+      // Update the opened column
+      const { error: updateError } = await supabase
+        .from('ai_tool_directory_lm')
+        .update({ opened: newOpened })
+        .eq('id', dirId)
+
+      if (updateError) {
+        console.log('Update Error: ' + updateError.message)
+      }
+    } catch (e) {
+      console.log('Exception: ' + e.message)
+    }
+  }
+
+  fetchDirName()
+
+  // Track tool clicks - add click listeners to all tool links
+  document.querySelectorAll('.tool-link').forEach(link => {
+    link.addEventListener('click', async (e) => {
+      const toolName = link.textContent.replace(' ↗', '').trim()
+      
+      // Get current interests, add new tool, update
+      const { data: currentData } = await supabase
+        .from('ai_tool_directory_lm')
+        .select('Interest')
+        .eq('id', dirId)
+        .single()
+
+      let interests = currentData?.Interest || ''
+      if (interests) interests += ', '
+      interests += toolName
+
+      await supabase
+        .from('ai_tool_directory_lm')
+        .update({ Interest: interests })
+        .eq('id', dirId)
+    })
+  })
+
+  // Highlight active nav pill on scroll
+  const sections = document.querySelectorAll('.category')
+  const pills = document.querySelectorAll('.nav-pill')
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        pills.forEach(p => p.classList.remove('active'))
+        const id = entry.target.id
+        const active = document.querySelector(`.nav-pill[href="#${id}"]`)
+        if (active) active.classList.add('active')
+      }
+    })
+  }, { threshold: 0.3 })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>
