@@ -679,6 +679,79 @@
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6bnRweHZ6a3J5a2ZlZmxxa3h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MzM0NDIsImV4cCI6MjA5MjAwOTQ0Mn0.KwM6yZF1pI3pNxjQaduG3kmKC7cSsUey8VVzoFwZXt8'
   )
 
+  // ═══════════════════════════════════════════════════════════════
+  // HUMAN VALIDATION - Silent background checks
+  // ═══════════════════════════════════════════════════════════════
+  const humanValidation = {
+    isValid: false,
+    mouseMoved: false,
+    scrolled: false,
+    touched: false
+  }
+
+  function checkValidation() {
+    if (humanValidation.isValid) return
+    
+    const desktopPassed = humanValidation.mouseMoved && humanValidation.scrolled
+    const mobilePassed = humanValidation.touched && humanValidation.scrolled
+    
+    if (desktopPassed || mobilePassed) {
+      humanValidation.isValid = true
+      console.log('[Human Validation] ✓ PASSED - network requests enabled')
+    }
+  }
+
+  // Track mouse movement (passive, doesn't block)
+  document.addEventListener('mousemove', (e) => {
+    if (!humanValidation.mouseMoved) {
+      humanValidation.mouseMoved = true
+      checkValidation()
+    }
+  }, { passive: true })
+
+  // Track touch events for mobile (passive, doesn't block)
+  let lastTouchY = 0
+  document.addEventListener('touchmove', (e) => {
+    if (!humanValidation.touched) {
+      humanValidation.touched = true
+      // If it's a scroll on mobile, mark scrolled too
+      if (e.touches[0].clientY !== lastTouchY) {
+        humanValidation.scrolled = true
+      }
+      checkValidation()
+    }
+  }, { passive: true })
+
+  document.addEventListener('touchstart', (e) => {
+    lastTouchY = e.touches[0].clientY
+  }, { passive: true })
+
+  // Also allow keyboard interaction on tablet/desktop without mouse
+  document.addEventListener('keydown', (e) => {
+    if (!humanValidation.isValid && !humanValidation.mouseMoved) {
+      humanValidation.mouseMoved = true // Consider keyboard as "human" activity
+      checkValidation()
+    }
+  }, { passive: true })
+
+  // Track scrolling (passive, doesn't block)
+  document.addEventListener('scroll', () => {
+    if (!humanValidation.scrolled) {
+      humanValidation.scrolled = true
+      checkValidation()
+    }
+  }, { passive: true })
+
+  // Wait for validation before write operations
+  async function waitForValidation() {
+    if (!humanValidation.isValid) {
+      console.log('[Human Validation] ⏳ Waiting for validation (write operation)...')
+      while (!humanValidation.isValid) {
+        await new Promise(r => setTimeout(r, 50))
+      }
+    }
+  }
+
   // Get ID from URL
   const urlParams = new URLSearchParams(window.location.search)
   const dirId = urlParams.get('id')
@@ -706,6 +779,9 @@
       // Calculate new opened value
       const newOpened = (currentData?.opened || 0) + 1
 
+      // Wait for human validation before write
+      await waitForValidation()
+
       // Update the opened column
       const { error: updateError } = await supabase
         .from('ai_tool_directory_lm')
@@ -722,12 +798,12 @@
 
   fetchDirName()
 
-  // Track tool clicks - add click listeners to all tool links
+// Track tool clicks - add click listeners to all tool links
   document.querySelectorAll('.tool-link').forEach(link => {
     link.addEventListener('click', async (e) => {
       const toolName = link.textContent.replace(' ↗', '').trim()
       
-      // Get current interests, add new tool, update
+      // Get current interests (this is a read - no wait)
       const { data: currentData } = await supabase
         .from('ai_tool_directory_lm')
         .select('Interest')
@@ -737,6 +813,9 @@
       let interests = currentData?.Interest || ''
       if (interests) interests += ', '
       interests += toolName
+
+      // Wait for human validation before write
+      await waitForValidation()
 
       await supabase
         .from('ai_tool_directory_lm')
